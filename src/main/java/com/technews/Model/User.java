@@ -1,16 +1,19 @@
 package com.technews.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.technews.Model.Comment;
+import com.technews.Model.Post;
+import com.technews.Model.Vote;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "user")
-
-public class User implements Serializable{
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,9 +24,6 @@ public class User implements Serializable{
     private String password;
     @Transient
     boolean loggedIn;
-//    private List<Post> posts;
-//    private List<Vote> votes;
-//    private List<Comment> comments;
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Post> posts;
@@ -45,6 +45,7 @@ public class User implements Serializable{
         this.email = email;
         this.password = password;
     }
+
 
     public Integer getId() {
         return id;
@@ -113,14 +114,21 @@ public class User implements Serializable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof User)) return false;
         User user = (User) o;
-        return loggedIn == user.loggedIn && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(posts, user.posts) && Objects.equals(votes, user.votes) && Objects.equals(comments, user.comments) && Objects.equals(posts, user.posts) && Objects.equals(votes, user.votes) && Objects.equals(comments, user.comments);
+        return isLoggedIn() == user.isLoggedIn() &&
+                Objects.equals(getId(), user.getId()) &&
+                Objects.equals(getUsername(), user.getUsername()) &&
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                Objects.equals(getPosts(), user.getPosts()) &&
+                Objects.equals(getVotes(), user.getVotes()) &&
+                Objects.equals(getComments(), user.getComments());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, email, password, loggedIn, posts, votes, comments, posts, votes, comments);
+        return Objects.hash(getId(), getUsername(), getEmail(), getPassword(), isLoggedIn(), getPosts(), getVotes(), getComments());
     }
 
     @Override
