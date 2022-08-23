@@ -4,6 +4,7 @@
 
   ## Description
   A platform where you can share, comment, on vote on relevant news in tech.
+  ![screenshot of tech news application](src/images/homepage.png)
 
   ## Table of Contents
   - [Installation](#installation)
